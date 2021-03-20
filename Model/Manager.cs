@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace internapi.Model
 {
@@ -10,5 +11,7 @@ namespace internapi.Model
         public string Mail { get; set; }
         [Required]
         public string Password { get; set; }
+        [NotMapped]
+        public string Token { get; set; }
     }
 }

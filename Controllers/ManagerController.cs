@@ -5,9 +5,11 @@ namespace internapi.Controllers
     using AutoMapper;
     using internapi.Model;
     using internapi.Repository.IRepository;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/manager")]
+    [Authorize(Roles = "Manager")]
     [ApiController]
     public class ManagerController : ControllerBase
     {

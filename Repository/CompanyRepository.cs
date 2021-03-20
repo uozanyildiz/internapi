@@ -28,7 +28,7 @@ namespace internapi
 
         public Company GetCompany(string name)
         {
-            return _db.Companies.Include(c => c.Internships).FirstOrDefault(x => x.Name.ToLower().Trim() == name.ToLower().Trim());
+            return _db.Companies.Include(c => c.Internships).FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
         }
         public bool CreateCompany(Company company)
         {
@@ -60,7 +60,7 @@ namespace internapi
 
         public bool CompanyExists(string name)
         {
-            return _db.Companies.Any(x => x.Name.ToLower().Trim() == name.ToLower().Trim());
+            return _db.Companies.Any(x => x.Name.ToLower() == name.ToLower());
         }
 
         public bool Save()

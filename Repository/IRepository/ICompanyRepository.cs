@@ -10,7 +10,6 @@ namespace internapi.Repository.IRepository
         Company GetCompany(string name);
 
         bool CreateCompany(Company company);
-
         bool CreateMultipleCompany(List<Company> companies);
         bool UpdateCompany(Company company);
         bool RemoveCompany(Company company);

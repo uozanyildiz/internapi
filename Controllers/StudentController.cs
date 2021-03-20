@@ -8,10 +8,12 @@ namespace internapi.Controllers
     using AutoMapper;
     using internapi.Model;
     using internapi.Repository.IRepository;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/student")]
     [ApiController]
+    [Authorize]
     public class StudentController : ControllerBase
     {
         private readonly IStudentRepository _studentRepo;
@@ -23,6 +25,7 @@ namespace internapi.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public IActionResult GetStudents()
         {
@@ -34,7 +37,6 @@ namespace internapi.Controllers
             }
             return Ok(objDto);
         }
-
         [HttpGet("byId/{studentId:int}")]
         public IActionResult GetStudentById(int studentId)
         {
@@ -65,6 +67,7 @@ namespace internapi.Controllers
             return Ok(objDto);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public IActionResult CreateStudent([FromBody] StudentDto studentDto)
         {
@@ -90,6 +93,7 @@ namespace internapi.Controllers
 
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPatch]
         public IActionResult UpdateStudent([FromBody] StudentDto studentDto)
         {
@@ -110,6 +114,7 @@ namespace internapi.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{id:int}")]
         public IActionResult DeleteStudent(int id)
         {
@@ -128,6 +133,7 @@ namespace internapi.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost("addMultiple")]
         public IActionResult CreateMultipleStudents([FromBody] List<StudentDto> studentList)
         {
