@@ -42,6 +42,7 @@ namespace internapi.Repository
                 {
                     Subject = new ClaimsIdentity(new Claim[] {
                         new Claim(ClaimTypes.Name, student.Mail),
+                        new Claim(ClaimTypes.Sid, student.Id.ToString()),
                         new Claim(ClaimTypes.Role, "Student")
                     }),
                     Expires = DateTime.UtcNow.AddDays(7),
@@ -65,6 +66,7 @@ namespace internapi.Repository
                 {
                     Subject = new ClaimsIdentity(new Claim[] {
                         new Claim(ClaimTypes.Name, manager.Mail),
+                        new Claim(ClaimTypes.Sid, manager.Id.ToString()),
                         new Claim(ClaimTypes.Role, "Manager")
                     }),
                     Expires = DateTime.UtcNow.AddDays(7),

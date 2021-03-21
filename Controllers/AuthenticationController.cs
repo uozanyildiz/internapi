@@ -7,7 +7,6 @@ namespace internapi.Controllers
 {
     [Route("api/authentication")]
     [ApiController]
-    [Authorize]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationRepository _authRepo;
@@ -17,7 +16,6 @@ namespace internapi.Controllers
             _authRepo = authRepo;
         }
 
-        [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login([FromBody] Authentication auth)
         {

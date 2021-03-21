@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.ComTypes;
 namespace internapi.Controllers
 {
     using System.Collections.Generic;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using AutoMapper;
     using internapi.Model;
@@ -48,7 +49,7 @@ namespace internapi.Controllers
         }
 
         [HttpGet("byName/name={name}&surname={surname}")]
-        public IActionResult GetStudentByName([FromQuery] string name, [FromQuery] string surname)
+        public IActionResult GetStudentByName(string name, string surname)
         {
             var obj = _studentRepo.GetStudent(name, surname);
             if (obj is null)
@@ -67,7 +68,6 @@ namespace internapi.Controllers
             return Ok(objDto);
         }
 
-        [Authorize(Roles = "Manager")]
         [HttpPost]
         public IActionResult CreateStudent([FromBody] StudentDto studentDto)
         {
@@ -93,10 +93,15 @@ namespace internapi.Controllers
 
         }
 
-        [Authorize(Roles = "Manager")]
         [HttpPatch]
         public IActionResult UpdateStudent([FromBody] StudentDto studentDto)
         {
+            var isIdSafe = User.Claims.Any(x => x.Type == ClaimTypes.Sid && x.Value == studentDto.Id.ToString());
+
+            //If student is trying to update an ID other than himself, deny it.
+            if (User.IsInRole("Student") && !isIdSafe)
+                return Forbid();
+
             if (studentDto == null && !_studentRepo.StudentExists(studentDto.Id))
                 return BadRequest(ModelState);
             if (!_studentRepo.StudentExists(studentDto.Mail))

@@ -5,10 +5,12 @@ namespace internapi.Controllers
     using AutoMapper;
     using internapi.Model;
     using internapi.Repository.IRepository;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/company")]
     [ApiController]
+    [Authorize]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyRepository _companyRepo;

@@ -9,8 +9,8 @@ namespace internapi.Controllers
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/manager")]
-    [Authorize(Roles = "Manager")]
     [ApiController]
+    [Authorize(Roles = "Manager")]
     public class ManagerController : ControllerBase
     {
         private readonly IManagerRepository _managerRepo;

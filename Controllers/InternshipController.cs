@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System.Linq;
 using System;
 namespace internapi.Controllers
 {
@@ -6,10 +8,12 @@ namespace internapi.Controllers
     using AutoMapper;
     using internapi.Model;
     using internapi.Repository.IRepository;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/internship")]
     [ApiController]
+    [Authorize]
     public class InternshipController : ControllerBase
     {
         private readonly IInternshipRepository _internshipRepo;
@@ -110,6 +114,11 @@ namespace internapi.Controllers
         [HttpPost]
         public IActionResult CreateInternship([FromBody] InternshipDto internshipDto)
         {
+            //Checking if user creating an internship for himself or not
+            var isIdSafe = User.Claims.Any(x => x.Type == ClaimTypes.Sid && x.Value == internshipDto.StudentId.ToString());
+            if (User.IsInRole("Student") && !isIdSafe)
+                return Forbid();
+
             if (internshipDto is null)
                 return BadRequest();
             if (!ModelState.IsValid)
@@ -128,6 +137,11 @@ namespace internapi.Controllers
         [HttpPatch]
         public IActionResult UpdateInternship([FromBody] InternshipDto internshipDto)
         {
+            //Checking if user creating an internship for himself or not
+            var isIdSafe = User.Claims.Any(x => x.Type == ClaimTypes.Sid && x.Value == internshipDto.StudentId.ToString());
+            if (User.IsInRole("Student") && !isIdSafe)
+                return Forbid();
+
             if (internshipDto is null)
                 return BadRequest();
             if (!_internshipRepo.InternshipExists(internshipDto.Id))
@@ -150,6 +164,7 @@ namespace internapi.Controllers
         [HttpDelete("{internshipId}")]
         public IActionResult DeleteInternship(int internshipId)
         {
+
             if (!_internshipRepo.InternshipExists(internshipId))
             {
                 ModelState.AddModelError("", $"Internship doesn't exists with id of {internshipId}");
@@ -157,6 +172,12 @@ namespace internapi.Controllers
             }
 
             var internshipObj = _internshipRepo.GetInternship(internshipId);
+
+            //Checking if user creating an internship for himself or not
+            var isIdSafe = User.Claims.Any(x => x.Type == ClaimTypes.Sid && x.Value == internshipObj.StudentId.ToString());
+            if (User.IsInRole("Student") && !isIdSafe)
+                return Forbid();
+
             if (!_internshipRepo.DeleteInternship(internshipObj))
             {
                 ModelState.AddModelError("", $"Something went wrong when updating model with id of {internshipId}");
